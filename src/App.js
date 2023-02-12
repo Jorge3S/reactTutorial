@@ -1,3 +1,10 @@
+/* 
+
+El código en App.js sirve para crear un componente que
+funcionara en la aplicacion web y que puede ser reutilizado. 
+
+*/
+
 import { useState } from 'react';
 
 function Square({ value, onSquareClick }) {
@@ -7,7 +14,6 @@ function Square({ value, onSquareClick }) {
     </button>
   );
 }
-
 function Board({ xIsNext, squares, onPlay }) {
   function handleClick(i) {
     if (calculateWinner(squares) || squares[i]) {
@@ -22,6 +28,10 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares);
   }
 
+  /* establece los turnos para los jugadores es decir luego de uno sigue el que sigue,
+  ademas evalua mediante el resultado de una funcion establesida mas adelante si el juego 
+  debe continuar o se detiene pues ya hay un ganador. 
+  */
   const winner = calculateWinner(squares);
   let status;
   if (winner) {
@@ -32,6 +42,7 @@ function Board({ xIsNext, squares, onPlay }) {
 
   return (
     <>
+    /* permite el agregar el simbolo correspondiente X/O segun sea el turno del jugador en cada celda generada. */
       <div className="status">{status}</div>
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
@@ -51,9 +62,10 @@ function Board({ xIsNext, squares, onPlay }) {
     </>
   );
 }
-
+/*esta funcion que puede ser utilizada desde cualquier otra, establece el tablero de juego asi como tambien determina que ficha se coloca a continuacion
+tambien genera un historial de las casillas seleccionadas independientemente de la ficha que lo tomo*/
 export default function Game() {
-  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [history, setHistory] = useState([Array(9).fill(null)]);   /* crea una matriz con nueve elementos y establece cada uno de ellos en null */
   const [currentMove, setCurrentMove] = useState(0);
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
@@ -67,7 +79,12 @@ export default function Game() {
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
   }
-
+  
+  /*
+  esta constante crea el historial de las fichas tomadas. mientas el turno devuelva el 
+  valor 0 se mostrara el mensaje 'Go to game start', de lo contrario se mostrara 'Go to 
+  move #' siendo el simbolo # el numero del movimiento 
+  */
   const moves = history.map((squares, move) => {
     let description;
     if (move > 0) {
@@ -93,7 +110,10 @@ export default function Game() {
     </div>
   );
 }
-
+/*
+anteriormente se menciono una funcion que funciona para determinar si un jugador ya gano, es esta funcion llamada calculateWinner
+Esta funcion establese las posiciones que debe haber tomado un jugador para que este gane.
+*/
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
